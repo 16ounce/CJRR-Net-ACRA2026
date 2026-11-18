@@ -1,0 +1,67 @@
+#!/bin/bash
+#PBS -N bvp_pairsw
+#PBS -l select=1:ncpus=4:mem=16gb:ngpus=1:gpu_model=V100
+#PBS -l walltime=06:00:00
+#PBS -j oe
+#PBS -o /srv/scratch/z5511538/bvpnet/output/logs/nlfonly_pair_sweep.log
+
+# =============================================================================
+# lambda_pair SWEEP UNDER THE NLF-ONLY STATE. 4 values x 15 seeds. (2026-08-12)
+#
+# THE PROBLEM. nlfonly is the best arm on norm% -- +2.56 pp over 35 paired seeds
+# [+2.03, +3.09], 33/35 positive, replicated on 20 seeds that had never been used
+# -- but it leaves 0%-recall at 0.91 against the shipped state's 0.14. The
+# distribution is not occasional: 25 of 35 seeds kill exactly one camera, 7 kill
+# none, 3 kill two or more.
+#
+# WHY THIS KNOB. lambda_pair's documented job IS de-collapsing
+# ([[project_loss_ablation_shift25]]: regret -> accuracy, pair -> collapse), but
+# the loss ablation re-run under this state showed it has gone inert: +0.02 pp
+# (p=0.94) on norm% and only -1.93 (p=0.14) on cam5+8, against -2.52 (p=0.026)
+# under the Gaussian state. Its value 0.2 was tuned on a state whose base arm sat
+# at cam5+8 81.9%; this state's base is already at 74.2%. So the setting is out
+# of date, not the term.
+#
+# WHAT CHANGED THE PROSPECTS. The earlier reading -- that the gain and the dead
+# camera are two ends of one trade-off, so fixing recall would cost norm% -- is
+# FALSIFIED by the per-seed data: corr(delta norm%, 0%-recall) = +0.104, p=0.55.
+# Seed 1006 takes the largest gain in the study (+6.59) with ZERO dead cameras;
+# seed 1018 is negative and still kills one. The two are independent, so there is
+# no reason in the data to expect the fix to cost the gain.
+#
+# 0.4 / 0.8 / 1.5 / 3.0 brackets 0.2 by up to 15x. The reference cells already
+# exist at 15 seeds: lambda_pair 0.0 (nlfloss_base + regret = nlfloss_reg,
+# 79.02) and 0.2 (nlfonly_nlfonly, 79.06).
+#
+# SELECTION MUST BE ON VAL. This sweep asks whether the knob moves 0%-recall at
+# all. Choosing a value by its TEST 0%-recall would be tuning on the test set;
+# the aggregator reports val alongside test so a deployable choice can be made
+# the way every other hyperparameter in this project is.
+#
+# Aggregate: python bvpnet/aggregate_pair_sweep.py
+# =============================================================================
+set -euo pipefail
+echo "========== JOB START =========="; date; hostname; nvidia-smi || true
+BVPNET_DIR=/srv/scratch/z5511538/bvpnet
+source /srv/scratch/z5511538/nbvnet/.venv/bin/activate
+cd ${BVPNET_DIR}
+for LP in 0.4 0.8 1.5 3.0; do
+  TAG=$(echo ${LP} | tr -d '.')
+  for SEED in 24 5 2 88 33 14 17 15 42 21 7 11 22 44 55; do
+    SAVE_DIR=${BVPNET_DIR}/models/pairsw_p${TAG}_seed${SEED}; mkdir -p ${SAVE_DIR}
+    echo ""; echo "---------- lambda_pair=${LP} seed=${SEED} ----------"
+    python ${BVPNET_DIR}/stage144_train_exp158_regret_loss.py \
+        --arm rand_full --config K --lambda_regret 0.5 --lambda_pair ${LP} \
+        --state_npz st_nlfonly.npz \
+        --train_data ${BVPNET_DIR}/data/latency_shift_train \
+        --val_data   ${BVPNET_DIR}/data/latency_shift_val \
+        --test_data  ${BVPNET_DIR}/data/latency_shift_test \
+        --save_dir ${SAVE_DIR} \
+        --lift3d_ckpt ${BVPNET_DIR}/models/lift3d_gaussian_mlp/best.pt \
+        --regret_scale -1 --epochs 100 --batch_size 256 --lr 1e-3 \
+        --weight_decay 1e-4 --dropout_prob 0.1 --patience 15 \
+        --lambda_lr 0.1 --rare_boost 1.0 --seed ${SEED}
+  done
+done
+echo ""; python ${BVPNET_DIR}/aggregate_pair_sweep.py || true
+date; echo "========== JOB END =========="

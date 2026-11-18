@@ -1,0 +1,11 @@
+archive/
+baselines/README.md
+provenance/README.md
+provenance/original_weights_README.md
+results/README.md
+weights/README.md
+__pycache__/
+*.py[cod]
+.DS_Store
+data/
+runs/

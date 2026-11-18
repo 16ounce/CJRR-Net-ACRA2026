@@ -1,0 +1,89 @@
+{
+  "paper_table": 3,
+  "rows": [
+    {
+      "candidates": 8,
+      "camera_ids": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "random_mpjpe_px": 299.76,
+      "selected_mpjpe_px": {
+        "mean": 105.18,
+        "sd": 2.61
+      },
+      "relative_reduction_pct": 64.91,
+      "tol_at_15_pct": {
+        "mean": 58.17,
+        "sd": 0.59
+      },
+      "evidence": "paper reported; raw decisions unavailable"
+    },
+    {
+      "candidates": 6,
+      "camera_ids": [
+        0,
+        2,
+        4,
+        6,
+        7,
+        8
+      ],
+      "random_mpjpe_px": 338.14,
+      "selected_mpjpe_px": {
+        "mean": 132.83,
+        "sd": 2.57
+      },
+      "relative_reduction_pct": 60.72,
+      "tol_at_15_pct": {
+        "mean": 60.17,
+        "sd": 0.52
+      },
+      "evidence": "paper reported; raw decisions unavailable"
+    },
+    {
+      "candidates": 4,
+      "camera_ids": [
+        0,
+        2,
+        7,
+        8
+      ],
+      "random_mpjpe_px": 345.49,
+      "selected_mpjpe_px": {
+        "mean": 134.25,
+        "sd": 2.65
+      },
+      "relative_reduction_pct": 61.14,
+      "tol_at_15_pct": {
+        "mean": 62.3,
+        "sd": 0.34
+      },
+      "evidence": "paper reported; raw decisions unavailable"
+    },
+    {
+      "candidates": 2,
+      "camera_ids": [
+        0,
+        6
+      ],
+      "random_mpjpe_px": 258.31,
+      "selected_mpjpe_px": {
+        "mean": 158.06,
+        "sd": 3.48
+      },
+      "relative_reduction_pct": 38.81,
+      "tol_at_15_pct": {
+        "mean": 85.64,
+        "sd": 1.44
+      },
+      "evidence": "paper reported; raw decisions unavailable"
+    }
+  ]
+}

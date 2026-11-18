@@ -1,0 +1,102 @@
+{
+  "per_position": [
+    {
+      "position": 0,
+      "norm_pct": 80.29136516048078,
+      "top1": 0.342
+    },
+    {
+      "position": 1,
+      "norm_pct": 78.63554820957783,
+      "top1": 0.324
+    },
+    {
+      "position": 2,
+      "norm_pct": 81.3194808731415,
+      "top1": 0.322
+    },
+    {
+      "position": 3,
+      "norm_pct": 80.66800008360964,
+      "top1": 0.332
+    },
+    {
+      "position": 4,
+      "norm_pct": 80.98969296076561,
+      "top1": 0.36
+    },
+    {
+      "position": 5,
+      "norm_pct": 81.03245854477404,
+      "top1": 0.344
+    },
+    {
+      "position": 6,
+      "norm_pct": 72.44640056016173,
+      "top1": 0.342
+    },
+    {
+      "position": 7,
+      "norm_pct": 76.82729120282531,
+      "top1": 0.31
+    }
+  ],
+  "avg_norm_pct": 79.02627969941706,
+  "avg_top1": 0.3345,
+  "tol5_top1": 42.8,
+  "tol10_top1": 51.75,
+  "cam58_share": 73.55,
+  "n_zero_recall": 0,
+  "pred_pct_mean": [
+    7.75,
+    0.9749999999999999,
+    10.950000000000001,
+    2.3749999999999996,
+    41.575,
+    1.175,
+    3.2249999999999996,
+    31.974999999999998
+  ],
+  "recall_mean": [
+    15.957446808510637,
+    6.89655172413793,
+    18.749999999999996,
+    0.7352941176470588,
+    52.82534246575342,
+    2.272727272727273,
+    3.8461538461538463,
+    46.92307692307692
+  ],
+  "rare_recall": 13.002232142857142,
+  "dom_recall": 50.04528985507246,
+  "revert_to_58": 67.91294642857142,
+  "cam1_recall": 6.89655172413793,
+  "random_px": 299.7563171386719,
+  "oracle_px": 52.261531829833984,
+  "tier": "exp158_rand_full",
+  "exp": "exp158",
+  "arm": "rand_full",
+  "dropout_arm": "rand_first",
+  "train_k": 0,
+  "ref_mode": "first",
+  "config": "K",
+  "joint_tokens": true,
+  "aux_head": false,
+  "film_mode": "input",
+  "pool_mode": "attn",
+  "lambda_lr": 0.1,
+  "lambda_regret": 0.5,
+  "lambda_pair": 0.4,
+  "regret_scale": 175.14029296704396,
+  "regret_scale_source": "refit from /srv/scratch/z5511538/bvpnet/data/latency_shift_train",
+  "rare_boost": 1.0,
+  "w_dom": 2.0,
+  "w_runnerup": 1.0,
+  "gap_thresh": 0.15,
+  "total_params": 451272,
+  "trainable_params": 325090,
+  "training_time_s": 15.746010541915894,
+  "seed": 13,
+  "best_epoch": 17,
+  "best_val_loss": 2.1974977799756323
+}

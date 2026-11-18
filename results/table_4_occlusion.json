@@ -1,0 +1,143 @@
+{
+  "paper_table": 4,
+  "seeds": [
+    5,
+    7,
+    55,
+    17,
+    13,
+    6,
+    11,
+    9,
+    22,
+    44
+  ],
+  "rows": [
+    {
+      "policy": "Uniform random",
+      "bins": [
+        {
+          "bin": "Low",
+          "mean": 247.22210261061952,
+          "sd": 6.688544294252171
+        },
+        {
+          "bin": "Medium",
+          "mean": 275.5438645604831,
+          "sd": 9.985792116293757
+        },
+        {
+          "bin": "High",
+          "mean": 401.9262562967696,
+          "sd": 11.232623394135208
+        }
+      ],
+      "evidence": "archived result JSON"
+    },
+    {
+      "policy": "Geometric utility",
+      "bins": [
+        {
+          "bin": "Low",
+          "mean": 162.44785853178175,
+          "sd": 0.0
+        },
+        {
+          "bin": "Medium",
+          "mean": 193.7378215248905,
+          "sd": 0.0
+        },
+        {
+          "bin": "High",
+          "mean": 253.63482692235243,
+          "sd": 0.0
+        }
+      ],
+      "evidence": "archived result JSON"
+    },
+    {
+      "policy": "ActiveMoCap-inspired planner",
+      "bins": [
+        {
+          "bin": "Low",
+          "mean": 152.1296689833066,
+          "sd": 18.479852797283257
+        },
+        {
+          "bin": "Medium",
+          "mean": 163.8488537498019,
+          "sd": 12.901424386781827
+        },
+        {
+          "bin": "High",
+          "mean": 242.83314081827797,
+          "sd": 8.800752004586654
+        }
+      ],
+      "evidence": "archived result JSON"
+    },
+    {
+      "policy": "PoseErrNet (adapted)",
+      "bins": [
+        {
+          "bin": "Low",
+          "mean": 97.86998979572179,
+          "sd": 2.892337845836721
+        },
+        {
+          "bin": "Medium",
+          "mean": 109.72912412501094,
+          "sd": 2.9059486704654307
+        },
+        {
+          "bin": "High",
+          "mean": 154.3729885382365,
+          "sd": 11.64603413520893
+        }
+      ],
+      "evidence": "archived result JSON"
+    },
+    {
+      "policy": "MLP with Shared Perception Inputs",
+      "bins": [
+        {
+          "bin": "Low",
+          "mean": 98.51,
+          "sd": 3.31
+        },
+        {
+          "bin": "Medium",
+          "mean": 102.82,
+          "sd": 2.18
+        },
+        {
+          "bin": "High",
+          "mean": 151.29,
+          "sd": 6.79
+        }
+      ],
+      "evidence": "paper reported; raw decisions unavailable"
+    },
+    {
+      "policy": "CJRR-Net",
+      "bins": [
+        {
+          "bin": "Low",
+          "mean": 92.2921112767018,
+          "sd": 2.737373996508116
+        },
+        {
+          "bin": "Medium",
+          "mean": 99.24200430756186,
+          "sd": 2.1628158364903456
+        },
+        {
+          "bin": "High",
+          "mean": 130.23885245824437,
+          "sd": 5.5093522327079825
+        }
+      ],
+      "evidence": "archived result JSON"
+    }
+  ]
+}

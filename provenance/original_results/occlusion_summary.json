@@ -1,0 +1,202 @@
+{
+  "experiment": "occlusion-stratified seeded baseline sanity",
+  "protocol": {
+    "dataset": "latency_shift_test",
+    "selection_observation": "frame t current observation",
+    "evaluation_target": "frame t+25 selected-view 2D MPJPE",
+    "candidate_camera_count": 8,
+    "all_candidates_selectable": true,
+    "seeds": [
+      5,
+      7,
+      55,
+      17,
+      13,
+      6,
+      11,
+      9,
+      22,
+      44
+    ],
+    "training_performed": false,
+    "checkpoint_loaded": false,
+    "occlusion_mask_role": "result stratification only; never selection",
+    "occlusion_bins": {
+      "Low": "0-2",
+      "Medium": "3-5",
+      "High": ">=6"
+    },
+    "decision_counts": {
+      "Low": 1547,
+      "Medium": 1340,
+      "High": 1113,
+      "total": 4000
+    },
+    "reported_metric_only": "selected-view 2D MPJPE (px)",
+    "random_rng": "numpy.random.default_rng(seed)",
+    "geometric_utility": "mean_j[(1-q_cur) * p_in * (1-p_self_occ)]"
+  },
+  "references": {
+    "uniform_random_exact_expectation_px": {
+      "Low": 247.22210261061952,
+      "Medium": 275.5438645604831,
+      "High": 401.9262562967696
+    },
+    "geometric_utility_px": {
+      "Low": 162.44785853178175,
+      "Medium": 193.7378215248905,
+      "High": 253.63482692235243
+    }
+  },
+  "methods": {
+    "Uniform random": {
+      "Low": {
+        "mean": 252.1349606685971,
+        "sample_standard_deviation_ddof_1": 6.688544294252171,
+        "per_seed": [
+          244.1779621139063,
+          262.33759622629333,
+          246.5461025891492,
+          253.20974833285646,
+          255.24852758480336,
+          254.21988535204778,
+          249.78241876948627,
+          262.5995041675235,
+          244.08552758032533,
+          249.1423339695798
+        ]
+      },
+      "Medium": {
+        "mean": 283.4191375161641,
+        "sample_standard_deviation_ddof_1": 9.985792116293757,
+        "per_seed": [
+          270.59050760411503,
+          266.92481441640143,
+          290.52903475405566,
+          282.0260641425403,
+          290.3274063722411,
+          296.30188593081573,
+          278.8951280579638,
+          295.56532602879537,
+          284.6287890405797,
+          278.4024188141325
+        ]
+      },
+      "High": {
+        "mean": 400.1904563624475,
+        "sample_standard_deviation_ddof_1": 11.232623394135208,
+        "per_seed": [
+          395.34786943605326,
+          421.4918053739261,
+          385.6449487160051,
+          386.083013202088,
+          394.7871145332384,
+          406.3033027666063,
+          399.43318733222185,
+          398.49406712610016,
+          413.5080017799316,
+          400.81125335830455
+        ]
+      }
+    },
+    "Geometric utility": {
+      "Low": {
+        "mean": 162.44785853178175,
+        "sample_standard_deviation_ddof_1": 0.0,
+        "per_seed": [
+          162.44785853178175,
+          162.44785853178175,
+          162.44785853178175,
+          162.44785853178175,
+          162.44785853178175,
+          162.44785853178175,
+          162.44785853178175,
+          162.44785853178175,
+          162.44785853178175,
+          162.44785853178175
+        ]
+      },
+      "Medium": {
+        "mean": 193.7378215248905,
+        "sample_standard_deviation_ddof_1": 0.0,
+        "per_seed": [
+          193.7378215248905,
+          193.7378215248905,
+          193.7378215248905,
+          193.7378215248905,
+          193.7378215248905,
+          193.7378215248905,
+          193.7378215248905,
+          193.7378215248905,
+          193.7378215248905,
+          193.7378215248905
+        ]
+      },
+      "High": {
+        "mean": 253.6348269223525,
+        "sample_standard_deviation_ddof_1": 0.0,
+        "per_seed": [
+          253.63482692235243,
+          253.63482692235243,
+          253.63482692235243,
+          253.63482692235243,
+          253.63482692235243,
+          253.63482692235243,
+          253.63482692235243,
+          253.63482692235243,
+          253.63482692235243,
+          253.63482692235243
+        ]
+      }
+    }
+  },
+  "prediction_hashes": {
+    "Uniform random": [
+      "e4dc8e40ed09aaa85bd50a4d8b07036c2fd9241012234f807b2a28fc7230b9d6",
+      "f6c273d8f18bb653790723ed3a7c7a54aac309ee39332412e2f76e4951501697",
+      "1b6fcba3dae23b329f88c84a0f6b1360ad3cd8d3a09fdce4191075979cc0e659",
+      "393960e9467f36998d118772b18c5673be772089a6d6a0380bda0291733f0c7d",
+      "4267f246909eafc172bbbe78b4c9274fec1011ce8f5f8ba3c21b3efba8b4dfa5",
+      "7f4f804ecb050f822c19421375e4b3a12dc2ff7712114eea90cf023482c87c78",
+      "e20cf37f12632165110ace8bc17165f5128adf207dff63dbdd2aa4710ff04042",
+      "95ae47b7e338b9d05c32b3a4e3bc7eb4242cb642d44ecbb7b55bcb2bca2bc713",
+      "874419cca3707d3c0bfd6830a51987a2a583a172146ed9acb1304f8e91e538bb",
+      "e4311107b0ff2b8e6e6f2bca8b64f0225f467d32682c323a6939f505e64e9230"
+    ],
+    "Geometric utility": [
+      "ee4895f2df3e2ad81afa7c30f9fb77c2811dc3563c5193bd59a5ec5d54ce2628",
+      "ee4895f2df3e2ad81afa7c30f9fb77c2811dc3563c5193bd59a5ec5d54ce2628",
+      "ee4895f2df3e2ad81afa7c30f9fb77c2811dc3563c5193bd59a5ec5d54ce2628",
+      "ee4895f2df3e2ad81afa7c30f9fb77c2811dc3563c5193bd59a5ec5d54ce2628",
+      "ee4895f2df3e2ad81afa7c30f9fb77c2811dc3563c5193bd59a5ec5d54ce2628",
+      "ee4895f2df3e2ad81afa7c30f9fb77c2811dc3563c5193bd59a5ec5d54ce2628",
+      "ee4895f2df3e2ad81afa7c30f9fb77c2811dc3563c5193bd59a5ec5d54ce2628",
+      "ee4895f2df3e2ad81afa7c30f9fb77c2811dc3563c5193bd59a5ec5d54ce2628",
+      "ee4895f2df3e2ad81afa7c30f9fb77c2811dc3563c5193bd59a5ec5d54ce2628",
+      "ee4895f2df3e2ad81afa7c30f9fb77c2811dc3563c5193bd59a5ec5d54ce2628"
+    ]
+  },
+  "checks": {
+    "strict_partition_of_4000_decisions": true,
+    "decision_counts_match_required": true,
+    "uniform_exact_reference_matches_to_2dp": true,
+    "geometric_reference_matches_to_2dp": true,
+    "random_prediction_hashes_all_unique": true,
+    "geometric_prediction_hashes_all_identical": true,
+    "geometric_sample_sd_exactly_zero": true,
+    "prediction_hashes_match_overall_table_by_seed": true,
+    "frame_t_feature_current_view_alignment_max_abs_error": 0.0
+  },
+  "per_seed_files": [
+    "per_seed/seed_005.json",
+    "per_seed/seed_007.json",
+    "per_seed/seed_055.json",
+    "per_seed/seed_017.json",
+    "per_seed/seed_013.json",
+    "per_seed/seed_006.json",
+    "per_seed/seed_011.json",
+    "per_seed/seed_009.json",
+    "per_seed/seed_022.json",
+    "per_seed/seed_044.json"
+  ]
+}

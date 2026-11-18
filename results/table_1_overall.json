@@ -1,0 +1,137 @@
+{
+  "paper_table": 1,
+  "seeds": [
+    5,
+    7,
+    55,
+    17,
+    13,
+    6,
+    11,
+    9,
+    22,
+    44
+  ],
+  "rows": [
+    {
+      "policy": "Uniform random",
+      "mpjpe_px": {
+        "mean": 299.7563246383667,
+        "sd": 5.265517506705762
+      },
+      "relative_reduction_pct": {
+        "mean": 0.0,
+        "sd": 1.7565993460847908
+      },
+      "tol_at_15_pct": {
+        "mean": 26.25,
+        "sd": 0.6718341395844013
+      },
+      "zero_recall": {
+        "mean": 0.0,
+        "sd": 0.0
+      },
+      "evidence": "exact expectation plus ten seeded draws"
+    },
+    {
+      "policy": "Geometric utility",
+      "mpjpe_px": {
+        "mean": 198.3027687072754,
+        "sd": 0.0
+      },
+      "relative_reduction_pct": {
+        "mean": 33.84534124245412,
+        "sd": 0.0
+      },
+      "tol_at_15_pct": {
+        "mean": 33.35,
+        "sd": 0.0
+      },
+      "zero_recall": {
+        "mean": 0.0,
+        "sd": 0.0
+      },
+      "evidence": "archived per-seed results"
+    },
+    {
+      "policy": "ActiveMoCap-inspired planner",
+      "mpjpe_px": {
+        "mean": 181.2932884264174,
+        "sd": 13.54660146716062
+      },
+      "relative_reduction_pct": {
+        "mean": 39.519777212051764,
+        "sd": 4.519204664799025
+      },
+      "tol_at_15_pct": {
+        "mean": 40.3725,
+        "sd": 4.022617479811978
+      },
+      "zero_recall": {
+        "mean": 0.0,
+        "sd": 0.0
+      },
+      "evidence": "archived per-seed results"
+    },
+    {
+      "policy": "PoseErrNet (adapted)",
+      "mpjpe_px": {
+        "mean": 117.56476144790649,
+        "sd": 5.023394605969535
+      },
+      "relative_reduction_pct": {
+        "mean": 60.77988862082288,
+        "sd": 1.6758261023221857
+      },
+      "tol_at_15_pct": {
+        "mean": 53.807500000000005,
+        "sd": 0.4451981456485302
+      },
+      "zero_recall": {
+        "mean": 6.3,
+        "sd": 0.48304589153964794
+      },
+      "evidence": "archived per-seed results"
+    },
+    {
+      "policy": "MLP with shared perception inputs",
+      "mpjpe_px": {
+        "mean": 114.64001293182373,
+        "sd": 3.4243756972470223
+      },
+      "relative_reduction_pct": {
+        "mean": 61.755597337823744,
+        "sd": 1.1423864991185002
+      },
+      "tol_at_15_pct": {
+        "mean": 55.15,
+        "sd": 0.8043285674675748
+      },
+      "zero_recall": {
+        "mean": 2.5,
+        "sd": 1.1785113019775793
+      },
+      "evidence": "archived per-seed results"
+    },
+    {
+      "policy": "CJRR-Net (ours)",
+      "mpjpe_px": {
+        "mean": 105.17900705337524,
+        "sd": 2.6060045586706417
+      },
+      "relative_reduction_pct": {
+        "mean": 64.91182969641376,
+        "sd": 0.8693743583275557
+      },
+      "tol_at_15_pct": {
+        "mean": 58.1675,
+        "sd": 0.5896149873717013
+      },
+      "zero_recall": {
+        "mean": 0.0,
+        "sd": 0.0
+      },
+      "evidence": "archived per-seed results"
+    }
+  ]
+}

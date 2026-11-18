@@ -1,0 +1,346 @@
+#!/bin/bash
+#PBS -N nlf04_rep_mean12
+#PBS -l select=1:ncpus=4:mem=16gb:ngpus=1:gpu_model=V100
+#PBS -l walltime=06:00:00
+#PBS -j oe
+#PBS -o /srv/scratch/z5511538/nlfhead/logs/rep_mean12.log
+
+# =============================================================================
+# nlfnet0.4 CONTROLS AND ABLATION ARMS.
+#
+# 10 runs = 1 arms x 10 seeds. Every one is
+# stage144_train_exp158_regret_loss.py with --state_npz st_nlfonly.npz, i.e.
+# models driven by the NLF root-head state. Only --config and the two
+# lambdas move between arms; everything else below is byte-identical.
+#
+# THE Full/Ours ROW IS NOT TRAINED HERE. bvpnet/models/pairsw_p04_seed{S}
+# already IS nlfnet0.4 at these ten seeds, from this same script and this same
+# command line (pbs/333, 336, 337). Retraining it could only introduce drift
+# between four tables that are required to agree.
+#
+# HELD CONSTANT ACROSS EVERY ROW (pre-registered):
+#   dataset         MPI-INF-3DHP
+#   input           frame t          label / eval    frame t+25 (1 s)
+#   splits          bvpnet/data/latency_shift_{train,val,test}  (identical dirs)
+#   state           st_nlfonly.npz -- the NLF root-head state, in every arm
+#   candidates      all 8, UNGATED; nothing reads a candidate's own confidence
+#   seeds           5 7 55 17 13 6 11 9 22 44
+#   objective       CE + 0.1*LambdaRank + 0.5*regret + 0.4*pair, EXCEPT the
+#                   three loss-ablation arms, which is what they vary.
+#                   lambda_pair is 0.4, not the Gaussian state's 0.2.
+#   dropout         K ~ U{1..8} observation dropout (--arm rand_full)
+#   optimiser       Adam lr 1e-3, wd 1e-4, batch 256, ReduceLROnPlateau
+#   early stopping  patience 15, max 100 epochs
+#   checkpointing   best VAL loss on latency_shift_val ONLY -- test never seen
+#   regret_scale    -1 => refit from THIS run's train split; a train-split
+#                   statistic and the train split is one file, so it is
+#                   identical across arms
+#
+# PAIRING. The loss arms are truly paired with Full: torch.manual_seed fires
+# before model construction and the model is byte-identical across them, so a
+# shared seed is a shared initialisation and the lambdas only enter the loss.
+# The branch and representation arms build a different module tree, walk a
+# different RNG stream, and are paired with Full by seed LABEL only. The
+# measured init-sensitivity floor for this family is 0.51 pp Top-1: a gap below
+# it is not architecture. Figures for those two groups are therefore
+# dot-and-interval, never slope plots.
+#
+# ARMS
+#   rep_mean12  --config Mean12     lr=0.5 lp=0.4   Mean-12D Encoding
+#
+# Then: python nlfhead/_common/collect.py     (evaluates + caches all metrics)
+# =============================================================================
+set -euo pipefail
+echo "========== JOB START =========="; date; hostname; nvidia-smi || true
+source /srv/scratch/z5511538/nbvnet/.venv/bin/activate
+cd /srv/scratch/z5511538/bvpnet
+which python && python --version
+
+
+mkdir -p /srv/scratch/z5511538/nlfhead/runs /srv/scratch/z5511538/nlfhead/logs
+
+
+# ---------- rep_mean12: Mean-12D Encoding ----------
+
+if [ -f /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed5/test_metrics.json ]; then
+    echo "SKIP rep_mean12 seed5 (already done)"
+else
+    echo ""; echo "---------- rep_mean12 seed=5 ----------"
+    mkdir -p /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed5
+    python /srv/scratch/z5511538/bvpnet/stage144_train_exp158_regret_loss.py \
+        --arm rand_full \
+        --config Mean12 \
+        --lambda_regret 0.5 \
+        --lambda_pair 0.4 \
+        --state_npz st_nlfonly.npz \
+        --train_data /srv/scratch/z5511538/bvpnet/data/latency_shift_train \
+        --val_data /srv/scratch/z5511538/bvpnet/data/latency_shift_val \
+        --test_data /srv/scratch/z5511538/bvpnet/data/latency_shift_test \
+        --save_dir /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed5 \
+        --lift3d_ckpt /srv/scratch/z5511538/bvpnet/models/lift3d_gaussian_mlp/best.pt \
+        --regret_scale -1 \
+        --epochs 100 \
+        --batch_size 256 \
+        --lr 1e-3 \
+        --weight_decay 1e-4 \
+        --dropout_prob 0.1 \
+        --patience 15 \
+        --lambda_lr 0.1 \
+        --rare_boost 1.0 \
+        --seed 5
+fi
+
+if [ -f /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed7/test_metrics.json ]; then
+    echo "SKIP rep_mean12 seed7 (already done)"
+else
+    echo ""; echo "---------- rep_mean12 seed=7 ----------"
+    mkdir -p /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed7
+    python /srv/scratch/z5511538/bvpnet/stage144_train_exp158_regret_loss.py \
+        --arm rand_full \
+        --config Mean12 \
+        --lambda_regret 0.5 \
+        --lambda_pair 0.4 \
+        --state_npz st_nlfonly.npz \
+        --train_data /srv/scratch/z5511538/bvpnet/data/latency_shift_train \
+        --val_data /srv/scratch/z5511538/bvpnet/data/latency_shift_val \
+        --test_data /srv/scratch/z5511538/bvpnet/data/latency_shift_test \
+        --save_dir /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed7 \
+        --lift3d_ckpt /srv/scratch/z5511538/bvpnet/models/lift3d_gaussian_mlp/best.pt \
+        --regret_scale -1 \
+        --epochs 100 \
+        --batch_size 256 \
+        --lr 1e-3 \
+        --weight_decay 1e-4 \
+        --dropout_prob 0.1 \
+        --patience 15 \
+        --lambda_lr 0.1 \
+        --rare_boost 1.0 \
+        --seed 7
+fi
+
+if [ -f /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed55/test_metrics.json ]; then
+    echo "SKIP rep_mean12 seed55 (already done)"
+else
+    echo ""; echo "---------- rep_mean12 seed=55 ----------"
+    mkdir -p /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed55
+    python /srv/scratch/z5511538/bvpnet/stage144_train_exp158_regret_loss.py \
+        --arm rand_full \
+        --config Mean12 \
+        --lambda_regret 0.5 \
+        --lambda_pair 0.4 \
+        --state_npz st_nlfonly.npz \
+        --train_data /srv/scratch/z5511538/bvpnet/data/latency_shift_train \
+        --val_data /srv/scratch/z5511538/bvpnet/data/latency_shift_val \
+        --test_data /srv/scratch/z5511538/bvpnet/data/latency_shift_test \
+        --save_dir /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed55 \
+        --lift3d_ckpt /srv/scratch/z5511538/bvpnet/models/lift3d_gaussian_mlp/best.pt \
+        --regret_scale -1 \
+        --epochs 100 \
+        --batch_size 256 \
+        --lr 1e-3 \
+        --weight_decay 1e-4 \
+        --dropout_prob 0.1 \
+        --patience 15 \
+        --lambda_lr 0.1 \
+        --rare_boost 1.0 \
+        --seed 55
+fi
+
+if [ -f /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed17/test_metrics.json ]; then
+    echo "SKIP rep_mean12 seed17 (already done)"
+else
+    echo ""; echo "---------- rep_mean12 seed=17 ----------"
+    mkdir -p /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed17
+    python /srv/scratch/z5511538/bvpnet/stage144_train_exp158_regret_loss.py \
+        --arm rand_full \
+        --config Mean12 \
+        --lambda_regret 0.5 \
+        --lambda_pair 0.4 \
+        --state_npz st_nlfonly.npz \
+        --train_data /srv/scratch/z5511538/bvpnet/data/latency_shift_train \
+        --val_data /srv/scratch/z5511538/bvpnet/data/latency_shift_val \
+        --test_data /srv/scratch/z5511538/bvpnet/data/latency_shift_test \
+        --save_dir /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed17 \
+        --lift3d_ckpt /srv/scratch/z5511538/bvpnet/models/lift3d_gaussian_mlp/best.pt \
+        --regret_scale -1 \
+        --epochs 100 \
+        --batch_size 256 \
+        --lr 1e-3 \
+        --weight_decay 1e-4 \
+        --dropout_prob 0.1 \
+        --patience 15 \
+        --lambda_lr 0.1 \
+        --rare_boost 1.0 \
+        --seed 17
+fi
+
+if [ -f /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed13/test_metrics.json ]; then
+    echo "SKIP rep_mean12 seed13 (already done)"
+else
+    echo ""; echo "---------- rep_mean12 seed=13 ----------"
+    mkdir -p /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed13
+    python /srv/scratch/z5511538/bvpnet/stage144_train_exp158_regret_loss.py \
+        --arm rand_full \
+        --config Mean12 \
+        --lambda_regret 0.5 \
+        --lambda_pair 0.4 \
+        --state_npz st_nlfonly.npz \
+        --train_data /srv/scratch/z5511538/bvpnet/data/latency_shift_train \
+        --val_data /srv/scratch/z5511538/bvpnet/data/latency_shift_val \
+        --test_data /srv/scratch/z5511538/bvpnet/data/latency_shift_test \
+        --save_dir /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed13 \
+        --lift3d_ckpt /srv/scratch/z5511538/bvpnet/models/lift3d_gaussian_mlp/best.pt \
+        --regret_scale -1 \
+        --epochs 100 \
+        --batch_size 256 \
+        --lr 1e-3 \
+        --weight_decay 1e-4 \
+        --dropout_prob 0.1 \
+        --patience 15 \
+        --lambda_lr 0.1 \
+        --rare_boost 1.0 \
+        --seed 13
+fi
+
+if [ -f /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed6/test_metrics.json ]; then
+    echo "SKIP rep_mean12 seed6 (already done)"
+else
+    echo ""; echo "---------- rep_mean12 seed=6 ----------"
+    mkdir -p /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed6
+    python /srv/scratch/z5511538/bvpnet/stage144_train_exp158_regret_loss.py \
+        --arm rand_full \
+        --config Mean12 \
+        --lambda_regret 0.5 \
+        --lambda_pair 0.4 \
+        --state_npz st_nlfonly.npz \
+        --train_data /srv/scratch/z5511538/bvpnet/data/latency_shift_train \
+        --val_data /srv/scratch/z5511538/bvpnet/data/latency_shift_val \
+        --test_data /srv/scratch/z5511538/bvpnet/data/latency_shift_test \
+        --save_dir /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed6 \
+        --lift3d_ckpt /srv/scratch/z5511538/bvpnet/models/lift3d_gaussian_mlp/best.pt \
+        --regret_scale -1 \
+        --epochs 100 \
+        --batch_size 256 \
+        --lr 1e-3 \
+        --weight_decay 1e-4 \
+        --dropout_prob 0.1 \
+        --patience 15 \
+        --lambda_lr 0.1 \
+        --rare_boost 1.0 \
+        --seed 6
+fi
+
+if [ -f /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed11/test_metrics.json ]; then
+    echo "SKIP rep_mean12 seed11 (already done)"
+else
+    echo ""; echo "---------- rep_mean12 seed=11 ----------"
+    mkdir -p /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed11
+    python /srv/scratch/z5511538/bvpnet/stage144_train_exp158_regret_loss.py \
+        --arm rand_full \
+        --config Mean12 \
+        --lambda_regret 0.5 \
+        --lambda_pair 0.4 \
+        --state_npz st_nlfonly.npz \
+        --train_data /srv/scratch/z5511538/bvpnet/data/latency_shift_train \
+        --val_data /srv/scratch/z5511538/bvpnet/data/latency_shift_val \
+        --test_data /srv/scratch/z5511538/bvpnet/data/latency_shift_test \
+        --save_dir /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed11 \
+        --lift3d_ckpt /srv/scratch/z5511538/bvpnet/models/lift3d_gaussian_mlp/best.pt \
+        --regret_scale -1 \
+        --epochs 100 \
+        --batch_size 256 \
+        --lr 1e-3 \
+        --weight_decay 1e-4 \
+        --dropout_prob 0.1 \
+        --patience 15 \
+        --lambda_lr 0.1 \
+        --rare_boost 1.0 \
+        --seed 11
+fi
+
+if [ -f /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed9/test_metrics.json ]; then
+    echo "SKIP rep_mean12 seed9 (already done)"
+else
+    echo ""; echo "---------- rep_mean12 seed=9 ----------"
+    mkdir -p /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed9
+    python /srv/scratch/z5511538/bvpnet/stage144_train_exp158_regret_loss.py \
+        --arm rand_full \
+        --config Mean12 \
+        --lambda_regret 0.5 \
+        --lambda_pair 0.4 \
+        --state_npz st_nlfonly.npz \
+        --train_data /srv/scratch/z5511538/bvpnet/data/latency_shift_train \
+        --val_data /srv/scratch/z5511538/bvpnet/data/latency_shift_val \
+        --test_data /srv/scratch/z5511538/bvpnet/data/latency_shift_test \
+        --save_dir /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed9 \
+        --lift3d_ckpt /srv/scratch/z5511538/bvpnet/models/lift3d_gaussian_mlp/best.pt \
+        --regret_scale -1 \
+        --epochs 100 \
+        --batch_size 256 \
+        --lr 1e-3 \
+        --weight_decay 1e-4 \
+        --dropout_prob 0.1 \
+        --patience 15 \
+        --lambda_lr 0.1 \
+        --rare_boost 1.0 \
+        --seed 9
+fi
+
+if [ -f /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed22/test_metrics.json ]; then
+    echo "SKIP rep_mean12 seed22 (already done)"
+else
+    echo ""; echo "---------- rep_mean12 seed=22 ----------"
+    mkdir -p /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed22
+    python /srv/scratch/z5511538/bvpnet/stage144_train_exp158_regret_loss.py \
+        --arm rand_full \
+        --config Mean12 \
+        --lambda_regret 0.5 \
+        --lambda_pair 0.4 \
+        --state_npz st_nlfonly.npz \
+        --train_data /srv/scratch/z5511538/bvpnet/data/latency_shift_train \
+        --val_data /srv/scratch/z5511538/bvpnet/data/latency_shift_val \
+        --test_data /srv/scratch/z5511538/bvpnet/data/latency_shift_test \
+        --save_dir /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed22 \
+        --lift3d_ckpt /srv/scratch/z5511538/bvpnet/models/lift3d_gaussian_mlp/best.pt \
+        --regret_scale -1 \
+        --epochs 100 \
+        --batch_size 256 \
+        --lr 1e-3 \
+        --weight_decay 1e-4 \
+        --dropout_prob 0.1 \
+        --patience 15 \
+        --lambda_lr 0.1 \
+        --rare_boost 1.0 \
+        --seed 22
+fi
+
+if [ -f /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed44/test_metrics.json ]; then
+    echo "SKIP rep_mean12 seed44 (already done)"
+else
+    echo ""; echo "---------- rep_mean12 seed=44 ----------"
+    mkdir -p /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed44
+    python /srv/scratch/z5511538/bvpnet/stage144_train_exp158_regret_loss.py \
+        --arm rand_full \
+        --config Mean12 \
+        --lambda_regret 0.5 \
+        --lambda_pair 0.4 \
+        --state_npz st_nlfonly.npz \
+        --train_data /srv/scratch/z5511538/bvpnet/data/latency_shift_train \
+        --val_data /srv/scratch/z5511538/bvpnet/data/latency_shift_val \
+        --test_data /srv/scratch/z5511538/bvpnet/data/latency_shift_test \
+        --save_dir /srv/scratch/z5511538/nlfhead/runs/rep_mean12_seed44 \
+        --lift3d_ckpt /srv/scratch/z5511538/bvpnet/models/lift3d_gaussian_mlp/best.pt \
+        --regret_scale -1 \
+        --epochs 100 \
+        --batch_size 256 \
+        --lr 1e-3 \
+        --weight_decay 1e-4 \
+        --dropout_prob 0.1 \
+        --patience 15 \
+        --lambda_lr 0.1 \
+        --rare_boost 1.0 \
+        --seed 44
+fi
+
+
+echo "========== JOB DONE =========="; date

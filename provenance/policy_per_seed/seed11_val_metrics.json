@@ -1,0 +1,102 @@
+{
+  "per_position": [
+    {
+      "position": 0,
+      "norm_pct": 75.67654082047942,
+      "top1": 0.26746506986027946
+    },
+    {
+      "position": 1,
+      "norm_pct": 71.03301965789302,
+      "top1": 0.27944111776447106
+    },
+    {
+      "position": 2,
+      "norm_pct": 71.3578081009831,
+      "top1": 0.25349301397205587
+    },
+    {
+      "position": 3,
+      "norm_pct": 73.52890299128096,
+      "top1": 0.2774451097804391
+    },
+    {
+      "position": 4,
+      "norm_pct": 74.34558356328759,
+      "top1": 0.25948103792415167
+    },
+    {
+      "position": 5,
+      "norm_pct": 72.18658886362928,
+      "top1": 0.25748502994011974
+    },
+    {
+      "position": 6,
+      "norm_pct": 71.46357725312458,
+      "top1": 0.2435129740518962
+    },
+    {
+      "position": 7,
+      "norm_pct": 74.7490099719601,
+      "top1": 0.25349301397205587
+    }
+  ],
+  "avg_norm_pct": 73.04262890282976,
+  "avg_top1": 0.26147704590818366,
+  "tol5_top1": 38.87225548902195,
+  "tol10_top1": 53.368263473053894,
+  "cam58_share": 70.20958083832335,
+  "n_zero_recall": 1,
+  "pred_pct_mean": [
+    14.620758483033931,
+    0.12475049900199599,
+    5.863273453093813,
+    6.5119760479041915,
+    42.76447105788423,
+    0.3493013972055888,
+    2.3203592814371254,
+    27.44510978043912
+  ],
+  "recall_mean": [
+    13.026315789473685,
+    0.0,
+    10.472972972972972,
+    32.758620689655174,
+    51.19485294117647,
+    2.5,
+    6.418918918918919,
+    22.82986111111111
+  ],
+  "rare_recall": 12.895927601809955,
+  "dom_recall": 36.607142857142854,
+  "revert_to_58": 64.02714932126696,
+  "cam1_recall": 0.0,
+  "random_px": 193.9860382080078,
+  "oracle_px": 50.290863037109375,
+  "tier": "exp158_rand_full",
+  "exp": "exp158",
+  "arm": "rand_full",
+  "dropout_arm": "rand_first",
+  "train_k": 0,
+  "ref_mode": "first",
+  "config": "K",
+  "joint_tokens": true,
+  "aux_head": false,
+  "film_mode": "input",
+  "pool_mode": "attn",
+  "lambda_lr": 0.1,
+  "lambda_regret": 0.5,
+  "lambda_pair": 0.4,
+  "regret_scale": 175.14029296704396,
+  "regret_scale_source": "refit from /srv/scratch/z5511538/bvpnet/data/latency_shift_train",
+  "rare_boost": 1.0,
+  "w_dom": 2.0,
+  "w_runnerup": 1.0,
+  "gap_thresh": 0.15,
+  "total_params": 451272,
+  "trainable_params": 325090,
+  "training_time_s": 13.131738185882568,
+  "seed": 11,
+  "best_epoch": 11,
+  "best_val_loss": 2.187954184537876
+}

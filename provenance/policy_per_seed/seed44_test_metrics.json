@@ -1,0 +1,102 @@
+{
+  "per_position": [
+    {
+      "position": 0,
+      "norm_pct": 79.64139486876223,
+      "top1": 0.324
+    },
+    {
+      "position": 1,
+      "norm_pct": 78.6566057821549,
+      "top1": 0.322
+    },
+    {
+      "position": 2,
+      "norm_pct": 78.1837028259402,
+      "top1": 0.322
+    },
+    {
+      "position": 3,
+      "norm_pct": 79.35231641377952,
+      "top1": 0.328
+    },
+    {
+      "position": 4,
+      "norm_pct": 80.35242626392193,
+      "top1": 0.298
+    },
+    {
+      "position": 5,
+      "norm_pct": 79.51398900218193,
+      "top1": 0.338
+    },
+    {
+      "position": 6,
+      "norm_pct": 71.21819937491139,
+      "top1": 0.308
+    },
+    {
+      "position": 7,
+      "norm_pct": 78.67627616286259,
+      "top1": 0.304
+    }
+  ],
+  "avg_norm_pct": 78.19936383681434,
+  "avg_top1": 0.318,
+  "tol5_top1": 40.349999999999994,
+  "tol10_top1": 49.9,
+  "cam58_share": 69.475,
+  "n_zero_recall": 0,
+  "pred_pct_mean": [
+    16.2,
+    0.475,
+    6.449999999999999,
+    2.5,
+    39.35,
+    0.65,
+    4.25,
+    30.125
+  ],
+  "recall_mean": [
+    24.867021276595743,
+    4.741379310344827,
+    11.875,
+    0.7352941176470588,
+    47.945205479452056,
+    3.409090909090909,
+    6.730769230769231,
+    42.88461538461538
+  ],
+  "rare_recall": 14.84375,
+  "dom_recall": 45.56159420289855,
+  "revert_to_58": 63.895089285714285,
+  "cam1_recall": 4.741379310344827,
+  "random_px": 299.7563171386719,
+  "oracle_px": 52.261531829833984,
+  "tier": "exp158_rand_full",
+  "exp": "exp158",
+  "arm": "rand_full",
+  "dropout_arm": "rand_first",
+  "train_k": 0,
+  "ref_mode": "first",
+  "config": "K",
+  "joint_tokens": true,
+  "aux_head": false,
+  "film_mode": "input",
+  "pool_mode": "attn",
+  "lambda_lr": 0.1,
+  "lambda_regret": 0.5,
+  "lambda_pair": 0.4,
+  "regret_scale": 175.14029296704396,
+  "regret_scale_source": "refit from /srv/scratch/z5511538/bvpnet/data/latency_shift_train",
+  "rare_boost": 1.0,
+  "w_dom": 2.0,
+  "w_runnerup": 1.0,
+  "gap_thresh": 0.15,
+  "total_params": 451272,
+  "trainable_params": 325090,
+  "training_time_s": 19.342588186264038,
+  "seed": 44,
+  "best_epoch": 22,
+  "best_val_loss": 2.1811535101450845
+}

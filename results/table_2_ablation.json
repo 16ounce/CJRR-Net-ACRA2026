@@ -1,0 +1,113 @@
+{
+  "paper_table": 2,
+  "seeds": [
+    5,
+    7,
+    55,
+    17,
+    13,
+    6,
+    11,
+    9,
+    22,
+    44
+  ],
+  "rows": [
+    {
+      "configuration": "A: scalar summary",
+      "mpjpe_px": {
+        "mean": 117.58448371887206,
+        "sd": 1.4561521071865853
+      },
+      "tol_at_15_pct": {
+        "mean": 54.25250000000001,
+        "sd": 0.6321754766940372
+      },
+      "zero_recall": {
+        "mean": 2.1,
+        "sd": 1.1972189997378648
+      },
+      "evidence": "archived per-seed results"
+    },
+    {
+      "configuration": "B: mean-12D",
+      "mpjpe_px": {
+        "mean": 105.19066991806031,
+        "sd": 2.5240002677706728
+      },
+      "tol_at_15_pct": {
+        "mean": 57.6625,
+        "sd": 0.6313840616719224
+      },
+      "zero_recall": {
+        "mean": 0.5,
+        "sd": 0.7071067811865476
+      },
+      "evidence": "archived per-seed results"
+    },
+    {
+      "configuration": "C: CJRR-Net",
+      "mpjpe_px": {
+        "mean": 105.17900705337524,
+        "sd": 2.6060045586706417
+      },
+      "tol_at_15_pct": {
+        "mean": 58.1675,
+        "sd": 0.5896149873717013
+      },
+      "zero_recall": {
+        "mean": 0.0,
+        "sd": 0.0
+      },
+      "evidence": "archived per-seed results"
+    },
+    {
+      "configuration": "C w/o geometry",
+      "mpjpe_px": {
+        "mean": 116.04886322021484,
+        "sd": 1.5661688280343848
+      },
+      "tol_at_15_pct": {
+        "mean": 54.51500000000001,
+        "sd": 0.5892792207434444
+      },
+      "zero_recall": {
+        "mean": 2.4,
+        "sd": 0.6992058987801011
+      },
+      "evidence": "archived per-seed results"
+    },
+    {
+      "configuration": "C w/o query",
+      "mpjpe_px": {
+        "mean": 108.87655239105224,
+        "sd": 2.6578005452147546
+      },
+      "tol_at_15_pct": {
+        "mean": 56.225,
+        "sd": 0.695421534834168
+      },
+      "zero_recall": {
+        "mean": 0.8,
+        "sd": 0.6324555320336759
+      },
+      "evidence": "archived per-seed results"
+    },
+    {
+      "configuration": "C w/o observation",
+      "mpjpe_px": {
+        "mean": 104.25755052566528,
+        "sd": 3.119291907352522
+      },
+      "tol_at_15_pct": {
+        "mean": 57.6275,
+        "sd": 0.5372835481485633
+      },
+      "zero_recall": {
+        "mean": 0.7,
+        "sd": 0.4830458915396479
+      },
+      "evidence": "archived per-seed results"
+    }
+  ]
+}

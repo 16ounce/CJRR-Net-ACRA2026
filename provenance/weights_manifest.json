@@ -1,0 +1,213 @@
+{
+  "model": "nlfnet0.4 (CJRR-Net config K + NLF root-head state)",
+  "built_from": "nlfhead/model_weights/collect_weights.py",
+  "seeds": [
+    5,
+    7,
+    55,
+    17,
+    13,
+    6,
+    11,
+    9,
+    22,
+    44
+  ],
+  "objective": "CE + 0.1*LambdaRank + 0.5*regret + 0.4*pair",
+  "data": "latency_shift_{train,val,test} (shift25: input t, label/eval t+25)",
+  "state_file": "bvpnet/data/latency_shift_*/st_nlfonly.npz  (DATA, not in this bundle)",
+  "total_bytes": 316928163,
+  "n_files": 15,
+  "files": [
+    {
+      "path": "nlf_s/nlf_s_multi_0.2.2.torchscript",
+      "source": "/srv/scratch/z5511538/nlfnet/models/nlf_s_multi_0.2.2.torchscript",
+      "role": "frozen NLF-S backbone (pose, per-joint sigma). Pretrained, never fine-tuned here. THE LEAK LIVES HERE.",
+      "loaded_by": "nlfnet/ extraction scripts -> data/nlf3d_split_*/nlf3d_mv.npy",
+      "bytes": 298012952,
+      "sha256": "554281115fcc296816610c647c46b583fc26ec766843c82bc5a0bd1469576479"
+    },
+    {
+      "path": "root_head/best.pt",
+      "source": "/srv/scratch/z5511538/bvpnet/models/nlf_root_head/best.pt",
+      "role": "trained root correction + its heteroscedastic variance; carries the input standardisation (mu, sd) and d_in=18.",
+      "loaded_by": "bvpnet/stage_nlf_root_head.py:RootHead",
+      "bytes": 82766,
+      "sha256": "83bf854e8615758e95f5c1d84551910da95a8ae03d60cbf80d1d36bb289a81a6"
+    },
+    {
+      "path": "root_head/s_art.npy",
+      "source": "/srv/scratch/z5511538/bvpnet/models/nlf_root_head/s_art.npy",
+      "role": "train-fitted per-axis scale that puts NLF sigma on the articulation residual. Required to rebuild the state; not optional.",
+      "loaded_by": "bvpnet/export_nlfonly_state.py",
+      "bytes": 152,
+      "sha256": "df933234f2cd2db614d56394a8135c4a9119d3a80afdff8ff1bb29c13063dab5"
+    },
+    {
+      "path": "root_head/root_metrics.json",
+      "source": "/srv/scratch/z5511538/bvpnet/models/nlf_root_head/root_metrics.json",
+      "role": "the root head own training/eval metrics (provenance only).",
+      "loaded_by": "--",
+      "bytes": 463,
+      "sha256": "0536df7302268d022910045e3d874f053ec8ae47374d312d61a37635f6b6307d"
+    },
+    {
+      "path": "lifter_bypassed/lift3d_gaussian_mlp_best.pt",
+      "source": "/srv/scratch/z5511538/bvpnet/models/lift3d_gaussian_mlp/best.pt",
+      "role": "Gaussian lifter. CONSTRUCTED AND BYPASSED -- nlfnet0.4 never calls it, but ReprojJointFeatures needs the file to exist to load.",
+      "loaded_by": "bvpnet/reproj_joint_features.py:ReprojJointFeatures(lift3d_ckpt=)",
+      "bytes": 509430,
+      "sha256": "de070ff52a2fd3b43ac31e78e3b73970695b00a7c251e73fb509a5c27b179f6b"
+    },
+    {
+      "path": "policy/nlfnet04_seed5.pt",
+      "source": "/srv/scratch/z5511538/bvpnet/models/pairsw_p04_seed5/best.pt",
+      "role": "CJRR-Net config K, seed 5 (325,090 trainable params).",
+      "loaded_by": "bvpnet/stage144_train_exp158_regret_loss.py",
+      "bytes": 1832240,
+      "sha256": "11cbb68ac54c56962d8728ea7ccaae6541688bc71a18ce0707c1f51bccb11e96",
+      "checkpoint_args": {
+        "seed": 5,
+        "epoch": 33,
+        "val_loss": 2.1800782975560415,
+        "tensor_elements": 452234,
+        "arm": "rand_full"
+      }
+    },
+    {
+      "path": "policy/nlfnet04_seed7.pt",
+      "source": "/srv/scratch/z5511538/bvpnet/models/pairsw_p04_seed7/best.pt",
+      "role": "CJRR-Net config K, seed 7 (325,090 trainable params).",
+      "loaded_by": "bvpnet/stage144_train_exp158_regret_loss.py",
+      "bytes": 1832240,
+      "sha256": "ba45c1703859cab12582c827bd7dd4501b4372df2fbbc8a8610f544a6d34dfdd",
+      "checkpoint_args": {
+        "seed": 7,
+        "epoch": 25,
+        "val_loss": 2.186245811675599,
+        "tensor_elements": 452234,
+        "arm": "rand_full"
+      }
+    },
+    {
+      "path": "policy/nlfnet04_seed55.pt",
+      "source": "/srv/scratch/z5511538/bvpnet/models/pairsw_p04_seed55/best.pt",
+      "role": "CJRR-Net config K, seed 55 (325,090 trainable params).",
+      "loaded_by": "bvpnet/stage144_train_exp158_regret_loss.py",
+      "bytes": 1832240,
+      "sha256": "88a81d171749a599c7a3a0600d8c8a7f5b3940cc6abdb906a1cefffcd41639ca",
+      "checkpoint_args": {
+        "seed": 55,
+        "epoch": 25,
+        "val_loss": 2.1793352948453375,
+        "tensor_elements": 452234,
+        "arm": "rand_full"
+      }
+    },
+    {
+      "path": "policy/nlfnet04_seed17.pt",
+      "source": "/srv/scratch/z5511538/bvpnet/models/pairsw_p04_seed17/best.pt",
+      "role": "CJRR-Net config K, seed 17 (325,090 trainable params).",
+      "loaded_by": "bvpnet/stage144_train_exp158_regret_loss.py",
+      "bytes": 1832240,
+      "sha256": "c72f3aa6a13c29a615e917e9fdb09d7db20b6e8e573e7182ab6e1cb5de513bc7",
+      "checkpoint_args": {
+        "seed": 17,
+        "epoch": 32,
+        "val_loss": 2.1850789349950004,
+        "tensor_elements": 452234,
+        "arm": "rand_full"
+      }
+    },
+    {
+      "path": "policy/nlfnet04_seed13.pt",
+      "source": "/srv/scratch/z5511538/bvpnet/models/pairsw_p04_seed13/best.pt",
+      "role": "CJRR-Net config K, seed 13 (325,090 trainable params).",
+      "loaded_by": "bvpnet/stage144_train_exp158_regret_loss.py",
+      "bytes": 1832240,
+      "sha256": "50cf9b5485a0803112975f6b4ec33b0f94622577a7338d2b3b21388f78b89d70",
+      "checkpoint_args": {
+        "seed": 13,
+        "epoch": 17,
+        "val_loss": 2.1974977799756323,
+        "tensor_elements": 452234,
+        "arm": "rand_full"
+      }
+    },
+    {
+      "path": "policy/nlfnet04_seed6.pt",
+      "source": "/srv/scratch/z5511538/bvpnet/models/pairsw_p04_seed6/best.pt",
+      "role": "CJRR-Net config K, seed 6 (325,090 trainable params).",
+      "loaded_by": "bvpnet/stage144_train_exp158_regret_loss.py",
+      "bytes": 1832240,
+      "sha256": "e66e26bcf6585b672352d355d6f320342df405058f75dd797bd9195a2f8f039e",
+      "checkpoint_args": {
+        "seed": 6,
+        "epoch": 29,
+        "val_loss": 2.1483739707284344,
+        "tensor_elements": 452234,
+        "arm": "rand_full"
+      }
+    },
+    {
+      "path": "policy/nlfnet04_seed11.pt",
+      "source": "/srv/scratch/z5511538/bvpnet/models/pairsw_p04_seed11/best.pt",
+      "role": "CJRR-Net config K, seed 11 (325,090 trainable params).",
+      "loaded_by": "bvpnet/stage144_train_exp158_regret_loss.py",
+      "bytes": 1832240,
+      "sha256": "a4baa905e8d6a9ca6e7386402c9b1f41145a44f67514801cfd0043c7134b514b",
+      "checkpoint_args": {
+        "seed": 11,
+        "epoch": 11,
+        "val_loss": 2.187954184537876,
+        "tensor_elements": 452234,
+        "arm": "rand_full"
+      }
+    },
+    {
+      "path": "policy/nlfnet04_seed9.pt",
+      "source": "/srv/scratch/z5511538/bvpnet/models/pairsw_p04_seed9/best.pt",
+      "role": "CJRR-Net config K, seed 9 (325,090 trainable params).",
+      "loaded_by": "bvpnet/stage144_train_exp158_regret_loss.py",
+      "bytes": 1832240,
+      "sha256": "8942408e47f136c5400e01d07aa5afdc99083908e4c260ae684e3bbebb5771e5",
+      "checkpoint_args": {
+        "seed": 9,
+        "epoch": 15,
+        "val_loss": 2.2015279215015098,
+        "tensor_elements": 452234,
+        "arm": "rand_full"
+      }
+    },
+    {
+      "path": "policy/nlfnet04_seed22.pt",
+      "source": "/srv/scratch/z5511538/bvpnet/models/pairsw_p04_seed22/best.pt",
+      "role": "CJRR-Net config K, seed 22 (325,090 trainable params).",
+      "loaded_by": "bvpnet/stage144_train_exp158_regret_loss.py",
+      "bytes": 1832240,
+      "sha256": "bb348e6e72d8de46372e8e7ea2edc428f17072d98de99971eaba31a8ccef56c6",
+      "checkpoint_args": {
+        "seed": 22,
+        "epoch": 14,
+        "val_loss": 2.2042091268741206,
+        "tensor_elements": 452234,
+        "arm": "rand_full"
+      }
+    },
+    {
+      "path": "policy/nlfnet04_seed44.pt",
+      "source": "/srv/scratch/z5511538/bvpnet/models/pairsw_p04_seed44/best.pt",
+      "role": "CJRR-Net config K, seed 44 (325,090 trainable params).",
+      "loaded_by": "bvpnet/stage144_train_exp158_regret_loss.py",
+      "bytes": 1832240,
+      "sha256": "c963eec03648f3dd531eee5b00b4d621b88b81d1c196883bb6096aa7ab443012",
+      "checkpoint_args": {
+        "seed": 44,
+        "epoch": 22,
+        "val_loss": 2.1811535101450845,
+        "tensor_elements": 452234,
+        "arm": "rand_full"
+      }
+    }
+  ]
+}

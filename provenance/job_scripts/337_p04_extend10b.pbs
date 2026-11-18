@@ -1,0 +1,88 @@
+#!/bin/bash
+#PBS -N bvp_p04ext2
+#PBS -l select=1:ncpus=4:mem=16gb:ngpus=1:gpu_model=V100
+#PBS -l walltime=04:00:00
+#PBS -j oe
+#PBS -o /srv/scratch/z5511538/bvpnet/output/logs/p04_extend20.log
+
+# =============================================================================
+# nlfonly + lambda_pair=0.4, A SECOND TEN SEEDS (n -> ~35). (2026-08-12)
+#
+# THIS BATCH IS NOT FOR norm%. At n=21 the effect is +2.43 pp with p=1.4e-8 and
+# 21/21 seeds positive; no number of further seeds will change that conclusion
+# and reporting a p-value that keeps shrinking is not evidence of anything.
+#
+# It is for 0%-RECALL, which is the one quantity that actually moved when the
+# sample grew: 0.47 at n=15 (9 of 15 seeds clean) became ~0.76 at n=21, with the
+# six new seeds returning [1,2,3,1,1,1] and not one of them clean. The n=15 read
+# -- and the claim built on it, that lambda_pair 0.4 "fixes" the dead camera --
+# was sampling luck, and is withdrawn. Whether the true rate sits under the
+# user's <1 line, and how heavy its tail is (one seed hit THREE dead cameras),
+# needs more draws than 21.
+#
+# The alternative use of this compute was lambda_pair 0.8, which at n=15 held
+# 0%-recall at 0.80 for -0.44 pp of norm%. That is the arm to run if the answer
+# here is "0.4 does not hold the line".
+#
+# WHY BOTH ARMS. mvdec_gg exists only at the original fifteen seeds. Adding the
+# arm alone would leave 25 arm runs against 15 control runs and the contrast
+# could still only be paired on 15 -- the extra runs would buy nothing. The
+# control is therefore re-run at exactly the new seeds, from this same script.
+#
+# THE NEW SEEDS are ten values not in the original fifteen
+# {24 5 2 88 33 14 17 15 42 21 7 11 22 44 55}. Seven come from the project's
+# older canonical-split vocabulary (66 77 99 111 123 999 2024) -- a different
+# split entirely, so no contamination -- and three are new (3 6 9).
+#
+# THIS IS A PRECISION EXERCISE, NOT A RESCUE. At n=15 the effect is already
+# +2.18 pp with p=1.4e-5 and 15/15 seeds positive; Wilcoxon agrees at p=6.1e-5.
+# Extending after seeing that is optional stopping in the technical sense, so
+# the number to report is the POOLED 25-seed estimate, never whichever of the
+# two subsets looks better. The purpose is a tighter CI (currently
+# [+1.46, +2.89]) and a better read on the 0%-recall rate, which at 15 seeds is
+# 0.47 with a 9/5/1 split over {0,1,2} cameras -- too few draws to characterise.
+#
+# Aggregate: python bvpnet/aggregate_p04_extended.py
+# =============================================================================
+set -euo pipefail
+echo "========== JOB START =========="; date; hostname; nvidia-smi || true
+BVPNET_DIR=/srv/scratch/z5511538/bvpnet
+source /srv/scratch/z5511538/nbvnet/.venv/bin/activate
+cd ${BVPNET_DIR}; which python
+
+NEW_SEEDS="1 4 8 10 12 13 16 18 19 20"
+
+for SEED in ${NEW_SEEDS}; do
+  # --- the arm: nlfonly state, lambda_pair 0.4 ---
+  SAVE_DIR=${BVPNET_DIR}/models/pairsw_p04_seed${SEED}; mkdir -p ${SAVE_DIR}
+  echo ""; echo "---------- p04 seed=${SEED} ----------"
+  python ${BVPNET_DIR}/stage144_train_exp158_regret_loss.py \
+      --arm rand_full --config K --lambda_regret 0.5 --lambda_pair 0.4 \
+      --state_npz st_nlfonly.npz \
+      --train_data ${BVPNET_DIR}/data/latency_shift_train \
+      --val_data   ${BVPNET_DIR}/data/latency_shift_val \
+      --test_data  ${BVPNET_DIR}/data/latency_shift_test \
+      --save_dir ${SAVE_DIR} \
+      --lift3d_ckpt ${BVPNET_DIR}/models/lift3d_gaussian_mlp/best.pt \
+      --regret_scale -1 --epochs 100 --batch_size 256 --lr 1e-3 \
+      --weight_decay 1e-4 --dropout_prob 0.1 --patience 15 \
+      --lambda_lr 0.1 --rare_boost 1.0 --seed ${SEED}
+
+  # --- the control: identical, no external state ---
+  SAVE_DIR=${BVPNET_DIR}/models/mvdec_gg_seed${SEED}; mkdir -p ${SAVE_DIR}
+  echo ""; echo "---------- gg seed=${SEED} ----------"
+  python ${BVPNET_DIR}/stage144_train_exp158_regret_loss.py \
+      --arm rand_full --config K --lambda_regret 0.5 --lambda_pair 0.2 \
+      --state_npz st_gg.npz \
+      --train_data ${BVPNET_DIR}/data/latency_shift_train \
+      --val_data   ${BVPNET_DIR}/data/latency_shift_val \
+      --test_data  ${BVPNET_DIR}/data/latency_shift_test \
+      --save_dir ${SAVE_DIR} \
+      --lift3d_ckpt ${BVPNET_DIR}/models/lift3d_gaussian_mlp/best.pt \
+      --regret_scale -1 --epochs 100 --batch_size 256 --lr 1e-3 \
+      --weight_decay 1e-4 --dropout_prob 0.1 --patience 15 \
+      --lambda_lr 0.1 --rare_boost 1.0 --seed ${SEED}
+done
+
+echo ""; python ${BVPNET_DIR}/aggregate_p04_extended.py || true
+date; echo "========== JOB END =========="
